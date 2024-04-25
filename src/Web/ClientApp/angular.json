@@ -71,11 +71,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "SecureStruct.Web:build:production"
+              "buildTarget": "SecureStruct.Web:build:production"
             },
             "development": {
-              "browserTarget": "SecureStruct.Web:build:development",
-              "proxyConfig": "proxy.conf.js"
+              "proxyConfig": "proxy.conf.js",
+              "buildTarget": "SecureStruct.Web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "SecureStruct.Web:build"
+            "buildTarget": "SecureStruct.Web:build"
           }
         },
         "test": {
