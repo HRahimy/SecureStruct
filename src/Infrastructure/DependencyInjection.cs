@@ -5,6 +5,10 @@ using SecureStruct.Application.Common.Interfaces;
 using SecureStruct.Domain.Constants;
 using SecureStruct.Infrastructure.Data;
 using SecureStruct.Infrastructure.Data.Interceptors;
+using SecureStruct.Infrastructure.Identity;
+using SecureStruct.Infrastructure.Identity.Authentication;
+using SecureStruct.Infrastructure.Identity.Authentication.Client;
+using SecureStruct.Infrastructure.Identity.Authentication.Flow;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -39,6 +43,16 @@ public static class DependencyInjection
         );
 
         services.AddScoped<ApplicationDbContextInitialiser>();
+
+        var keycloakConfig = configuration.GetSection("Keycloak")!;
+        var client = AuthenticatedHttpClientFactory.Create(new PasswordGrantFlow
+        {
+            UserName = keycloakConfig["UserName"]!,
+            Password = keycloakConfig["Password"]!,
+            KeycloakUrl = keycloakConfig["KeycloakUrl"]!
+        });
+        services.AddSingleton(client);
+        services.AddScoped<IIdentityService, IdentityService>();
 
         services.AddSingleton(TimeProvider.System);
 

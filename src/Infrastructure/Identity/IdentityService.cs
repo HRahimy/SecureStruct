@@ -1,80 +1,54 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using SecureStruct.Application.Common.Interfaces;
 using SecureStruct.Application.Common.Models;
+using SecureStruct.Infrastructure.Identity.Authentication.Client;
 
 namespace SecureStruct.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
+    private readonly AuthenticatedHttpClient _httpClient;
 
     public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService
+        IAuthorizationService authorizationService,
+        AuthenticatedHttpClient httpClient
     )
     {
-        _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
+        _httpClient = httpClient;
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user?.UserName;
+        var result = await _httpClient.SendAsync(new HttpRequestMessage(
+                HttpMethod.Get, _httpClient.KeycloakUrl + $"/admin/realms/master/users/{userId}"
+                ), CancellationToken.None
+            );
+        var resultString = await result.Content.ReadAsStringAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(
+    public Task<(Result Result, string UserId)> CreateUserAsync(
         string userName,
         string password
     )
     {
-        var user = new ApplicationUser { UserName = userName, Email = userName, };
-
-        var result = await _userManager.CreateAsync(user, password);
-
-        return (result.ToApplicationResult(), user.Id);
+        throw new NotImplementedException();
     }
 
-    public async Task<bool> IsInRoleAsync(string userId, string role)
+    public Task<bool> IsInRoleAsync(string userId, string role)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user != null && await _userManager.IsInRoleAsync(user, role);
+        throw new NotImplementedException();
     }
 
-    public async Task<bool> AuthorizeAsync(string userId, string policyName)
+    public Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        if (user == null)
-        {
-            return false;
-        }
-
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-        return result.Succeeded;
+        throw new NotImplementedException();
     }
 
-    public async Task<Result> DeleteUserAsync(string userId)
+    public Task<Result> DeleteUserAsync(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
-    }
-
-    public async Task<Result> DeleteUserAsync(ApplicationUser user)
-    {
-        var result = await _userManager.DeleteAsync(user);
-
-        return result.ToApplicationResult();
+        throw new NotImplementedException();
     }
 }

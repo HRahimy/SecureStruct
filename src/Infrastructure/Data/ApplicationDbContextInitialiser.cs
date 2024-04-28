@@ -1,12 +1,10 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SecureStruct.Domain.Constants;
 using SecureStruct.Domain.Entities;
-using SecureStruct.Infrastructure.Identity;
 
 namespace SecureStruct.Infrastructure.Data;
 

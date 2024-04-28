@@ -1,7 +1,7 @@
 ﻿@using SecureStruct.Infrastructure.Identity
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@* @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager *@
 
 @{
     string? returnUrl = null;
@@ -13,7 +13,7 @@
 }
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+@*     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity!.Name!</a>
@@ -32,5 +32,5 @@
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@returnUrl">Login</a>
         </li>
-    }
+    } *@
 </ul>
