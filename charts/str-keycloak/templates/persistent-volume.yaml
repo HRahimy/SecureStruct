@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "str-keycloak.fullname" . }}-pv
+  labels:
+    {{- include "str-keycloak.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual
+  volumeMode: Filesystem
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /run/desktop/mnt/host/wsl/data/postgres

@@ -50,6 +50,25 @@ spec:
               value: {{ .Values.env.kc_proxy }}
             - name: KC_DB
               value: {{ .Values.env.db.vendor }}
+            - name: KC_DB_URL_HOST
+              value: {{ include "str-keycloak.fullname" . }}-psql
+            - name: KC_DB_URL_PORT
+              value: "5432"
+            - name: KC_DB_URL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbName
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbUser
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbPassword
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:

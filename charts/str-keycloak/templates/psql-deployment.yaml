@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}-psql
-          image: postgres:latest
+          image: postgres:15
           env:
             - name: POSTGRES_DB
               valueFrom:
@@ -42,6 +42,9 @@ spec:
           ports:
             - containerPort: 5432
               name: psql
+          volumeMounts:
+            - name: {{ include "str-keycloak.fullname" . }}-psql-persistent-storage
+              mountPath: "/pgData"
       volumes:
         - name: {{ include "str-keycloak.fullname" . }}-psql-persistent-storage
           persistentVolumeClaim:
