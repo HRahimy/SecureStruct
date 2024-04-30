@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "str-keycloak.fullname" . }}-psql
+  labels:
+    {{- include "str-keycloak.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "str-keycloak.selectorLabels" . | nindent 6 }}
+      tier: psql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "str-keycloak.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        tier: psql
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-psql
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbName
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbPassword
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "str-keycloak.fullname" . }}-psql-secrets
+                  key: dbUser
+          ports:
+            - containerPort: 5432
+              name: psql
+      volumes:
+        - name: {{ include "str-keycloak.fullname" . }}-psql-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "str-keycloak.fullname" . }}-psql-pv-claim

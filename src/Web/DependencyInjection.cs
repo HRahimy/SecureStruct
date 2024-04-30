@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
@@ -25,7 +24,7 @@ public static class DependencyInjection
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "http://localhost:8080/realms/master";
+                options.Authority = "http://localhost:44954/realms/master";
                 options.SaveToken = false;
                 options.RequireHttpsMetadata = false;
 
@@ -35,7 +34,7 @@ public static class DependencyInjection
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "http://localhost:8080/realms/master"
+                    ValidIssuer = "http://localhost:44954/realms/master"
                 };
             });
 
