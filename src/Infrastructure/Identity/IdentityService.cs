@@ -74,6 +74,7 @@ public class IdentityService : IIdentityService
 
     public Task<bool> AuthorizeAsync(string userId, string policyName)
     {
+
         throw new NotImplementedException();
     }
 
