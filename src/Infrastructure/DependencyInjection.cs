@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FS.Keycloak.RestApiClient.Authentication.Client;
+using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
+using FS.Keycloak.RestApiClient.Authentication.Flow;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using SecureStruct.Application.Common.Interfaces;
@@ -6,9 +9,6 @@ using SecureStruct.Domain.Constants;
 using SecureStruct.Infrastructure.Data;
 using SecureStruct.Infrastructure.Data.Interceptors;
 using SecureStruct.Infrastructure.Identity;
-using SecureStruct.Infrastructure.Identity.Authentication;
-using SecureStruct.Infrastructure.Identity.Authentication.Client;
-using SecureStruct.Infrastructure.Identity.Authentication.Flow;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -44,14 +44,21 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        var keycloakConfig = configuration.GetSection("Keycloak")!;
-        var client = AuthenticatedHttpClientFactory.Create(new PasswordGrantFlow
+        services.Configure<KeycloakParams>(configuration.GetSection("Keycloak"));
+
+        var keycloakConfig = configuration.GetSection("Keycloak");
+        var credentials = new ClientCredentialsFlow
         {
-            UserName = keycloakConfig["UserName"]!,
-            Password = keycloakConfig["Password"]!,
-            KeycloakUrl = keycloakConfig["KeycloakUrl"]!
-        });
-        services.AddSingleton(client);
+            KeycloakUrl = keycloakConfig["KeycloakUrl"],
+            ClientId = keycloakConfig["ClientId"],
+            ClientSecret = keycloakConfig["ClientSecret"]
+        };
+
+        var httpClient = AuthenticationHttpClientFactory.Create(credentials) ??
+            throw new Exception("Could not create Keycloak Admin client");
+
+        services.AddSingleton<AuthenticationHttpClient>(httpClient);
+
         services.AddScoped<IIdentityService, IdentityService>();
 
         services.AddSingleton(TimeProvider.System);

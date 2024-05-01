@@ -38,6 +38,7 @@
     <PackageVersion Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="Respawn" Version="6.1.0" />
+    <PackageVersion Include="Schick.Keycloak.RestApiClient" Version="24.0.1" />
     <PackageVersion Include="Testcontainers.MsSql" Version="3.6.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.40.0" />
     <PackageVersion Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />

@@ -23,7 +23,7 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
 
     public async Task<TodosVm> Handle(GetTodosQuery request, CancellationToken cancellationToken)
     {
-        await _identity.GetUserNameAsync("a9e8b2f3-7dc9-4e53-ad36-1cfbf46e0fb9");
+        await _identity.GetUserNameAsync("c071b678-bd5c-45e1-ad8e-117888f93861");
         return new TodosVm
         {
             PriorityLevels = Enum.GetValues(typeof(PriorityLevel))
