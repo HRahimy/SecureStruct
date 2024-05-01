@@ -12,5 +12,13 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /run/desktop/mnt/host/wsl/data/postgres
+  local:
+    path: /run/desktop/mnt/host/c/persistentVolume
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
