@@ -2,6 +2,34 @@
 
 The project was generated using the [Clean.Architecture.Solution.Template](https://github.com/jasontaylordev/SecureStruct) version 8.0.5.
 
+## Set up Keycloak
+
+For development environment, we can host the keycloak instance using Docker
+
+> Reference for steps: https://stackoverflow.com/a/74715594/5472560
+
+1. Create a `docker volume` for the H2 database files
+
+```lang-shell
+docker volume create keycloak
+```
+
+2. Set the correct permissions on the new volume (the `keycloak` user in the `quay.io/keycloak/keycloak:18.0.2` image container is `UID: 1000`, `GID: 0`)
+
+```lang-shell
+docker run \
+    --rm \
+    --entrypoint chown \
+    -v keycloak:/keycloak \
+    alpine -R 1000:0 /keycloak
+```
+
+3. Use the docker volume to persist the H2 database 
+
+```lang-shell
+docker run -p 44954:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --restart unless-stopped -d -v keycloak:/opt/keycloak/data/h2 quay.io/keycloak/keycloak:24.0.3 start-dev
+```
+
 ## Build
 
 Run `dotnet build -tl` to build the solution.
