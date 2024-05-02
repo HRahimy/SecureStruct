@@ -17,11 +17,7 @@ docker volume create keycloak
 2. Set the correct permissions on the new volume (the `keycloak` user in the `quay.io/keycloak/keycloak:18.0.2` image container is `UID: 1000`, `GID: 0`)
 
 ```lang-shell
-docker run \
-    --rm \
-    --entrypoint chown \
-    -v keycloak:/keycloak \
-    alpine -R 1000:0 /keycloak
+docker run --rm --entrypoint chown -v keycloak:/keycloak alpine -R 1000:0 /keycloak
 ```
 
 3. Use the docker volume to persist the H2 database 
