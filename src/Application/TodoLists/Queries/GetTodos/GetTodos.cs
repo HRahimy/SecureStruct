@@ -12,18 +12,15 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IIdentityService _identity;
 
-    public GetTodosQueryHandler(IApplicationDbContext context, IMapper mapper, IIdentityService identity)
+    public GetTodosQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _identity = identity;
     }
 
     public async Task<TodosVm> Handle(GetTodosQuery request, CancellationToken cancellationToken)
     {
-        await _identity.GetUserNameAsync("c071b678-bd5c-45e1-ad8e-117888f93861");
         return new TodosVm
         {
             PriorityLevels = Enum.GetValues(typeof(PriorityLevel))

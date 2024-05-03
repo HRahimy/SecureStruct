@@ -27,12 +27,6 @@ public class IdentityService : IIdentityService
         _roleMapperApi = ApiClientFactory.Create<RoleMapperApi>(authenticationHttpClient);
     }
 
-    public async Task<string?> GetUserNameAsync(string userId)
-    {
-        var result = await _usersApi.GetUsersByUserIdAsync(_keycloakParams.Realm, userId);
-        return result.Username;
-    }
-
     public async Task<(Result Result, string UserId)> CreateUserAsync(
         string userName,
         string password

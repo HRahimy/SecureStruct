@@ -21,6 +21,9 @@ public class CurrentUser : IUser
 
     public string? Id =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserName =>
+        _httpContextAccessor.HttpContext?.User?.FindFirstValue("preferred_username");
+
     public string? AccessToken =>
         _httpContextAccessor.HttpContext?.Request.Headers[HeaderNames.Authorization];
 

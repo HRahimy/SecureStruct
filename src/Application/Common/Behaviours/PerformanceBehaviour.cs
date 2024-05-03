@@ -37,12 +37,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         {
             var requestName = typeof(TRequest).Name;
             var userId = _user.Id ?? string.Empty;
-            var userName = string.Empty;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userName = await _identityService.GetUserNameAsync(userId);
-            }
+            var userName = _user.UserName ?? string.Empty;
 
             _logger.LogWarning("SecureStruct Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                 requestName, elapsedMilliseconds, userId, userName, request);
