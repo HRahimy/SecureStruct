@@ -17,7 +17,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://localhost:8080',
+        url: 'http://localhost:44954',
         realm: 'master',
         clientId: 'securestruct.web'
       },

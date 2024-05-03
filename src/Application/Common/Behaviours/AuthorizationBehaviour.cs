@@ -33,15 +33,18 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             // Role-based authorization
             var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
 
+            var userRoles = _user.Roles;
+
             if (authorizeAttributesWithRoles.Any())
             {
                 var authorized = false;
+                if (_user.Roles == null) throw new ForbiddenAccessException();
 
                 foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(',')))
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
+                        var isInRole = _user.Roles.Contains(role.Trim());
                         if (isInRole)
                         {
                             authorized = true;

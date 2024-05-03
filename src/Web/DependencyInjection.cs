@@ -34,7 +34,8 @@ public static class DependencyInjection
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "http://localhost:44954/realms/master"
+                    ValidIssuer = "http://localhost:44954/realms/master",
+                    RoleClaimType = "realm_access"
                 };
             });
 

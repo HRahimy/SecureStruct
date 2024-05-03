@@ -12,7 +12,6 @@ namespace SecureStruct.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-    private readonly IAuthorizationService _authorizationService;
     private readonly KeycloakParams _keycloakParams;
     private readonly UsersApi _usersApi;
     private readonly RoleMapperApi _roleMapperApi;
@@ -23,7 +22,6 @@ public class IdentityService : IIdentityService
     )
     {
         _keycloakParams = optionsAccessor.Value;
-        _authorizationService = authorizationService;
 
         _usersApi = ApiClientFactory.Create<UsersApi>(authenticationHttpClient);
         _roleMapperApi = ApiClientFactory.Create<RoleMapperApi>(authenticationHttpClient);
@@ -74,7 +72,6 @@ public class IdentityService : IIdentityService
 
     public Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-
         throw new NotImplementedException();
     }
 
