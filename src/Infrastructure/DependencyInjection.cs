@@ -46,6 +46,8 @@ public static class DependencyInjection
 
         services.Configure<KeycloakParams>(configuration.GetSection("Keycloak"));
 
+        services.AddScoped<IAuthorizerService, KeycloakAuthorizerService>();
+
         services.AddSingleton(TimeProvider.System);
 
         services.AddAuthorization(options =>

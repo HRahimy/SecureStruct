@@ -8,11 +8,15 @@ namespace SecureStruct.Application.Common.Behaviours;
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IUser _user;
+    private readonly IAuthorizerService _authorizerService;
 
     public AuthorizationBehaviour(
-        IUser user)
+        IUser user,
+        IAuthorizerService authorizerService
+        )
     {
         _user = user;
+        _authorizerService = authorizerService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -22,15 +26,13 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
         if (authorizeAttributes.Any())
         {
             // Must be authenticated user
-            if (_user.Id == null)
+            if (_user.Id == null || _user.AccessToken == null)
             {
                 throw new UnauthorizedAccessException();
             }
 
             // Role-based authorization
             var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
-
-            var userRoles = _user.Roles;
 
             if (authorizeAttributesWithRoles.Any())
             {
@@ -61,14 +63,12 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy));
             if (authorizeAttributesWithPolicies.Any())
             {
-                foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
-                {
-                    //var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
+                var permissions = authorizeAttributesWithPolicies.Select(a => a.Policy).ToList();
+                var authorized = await _authorizerService.AuthorizeAsync(_user.AccessToken, permissions);
 
-                    //if (!authorized)
-                    //{
-                    //    throw new ForbiddenAccessException();
-                    //}
+                if (!authorized)
+                {
+                    throw new ForbiddenAccessException();
                 }
             }
         }

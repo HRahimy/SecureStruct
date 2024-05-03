@@ -1,11 +1,13 @@
 ﻿using SecureStruct.Application.Common.Interfaces;
 using SecureStruct.Application.Common.Models;
 using SecureStruct.Application.Common.Security;
+using SecureStruct.Domain.Constants;
 using SecureStruct.Domain.Enums;
 
 namespace SecureStruct.Application.TodoLists.Queries.GetTodos;
 
 [Authorize]
+[Authorize(Policy = Policies.TodoResource)]
 public record GetTodosQuery : IRequest<TodosVm>;
 
 public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
