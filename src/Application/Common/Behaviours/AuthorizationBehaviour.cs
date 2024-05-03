@@ -8,14 +8,11 @@ namespace SecureStruct.Application.Common.Behaviours;
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IUser _user;
-    private readonly IIdentityService _identityService;
 
     public AuthorizationBehaviour(
-        IUser user,
-        IIdentityService identityService)
+        IUser user)
     {
         _user = user;
-        _identityService = identityService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -66,12 +63,12 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             {
                 foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                 {
-                    var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
+                    //var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
 
-                    if (!authorized)
-                    {
-                        throw new ForbiddenAccessException();
-                    }
+                    //if (!authorized)
+                    //{
+                    //    throw new ForbiddenAccessException();
+                    //}
                 }
             }
         }

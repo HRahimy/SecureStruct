@@ -46,21 +46,6 @@ public static class DependencyInjection
 
         services.Configure<KeycloakParams>(configuration.GetSection("Keycloak"));
 
-        var keycloakConfig = configuration.GetSection("Keycloak");
-        var credentials = new ClientCredentialsFlow
-        {
-            KeycloakUrl = keycloakConfig["KeycloakUrl"],
-            ClientId = keycloakConfig["ClientId"],
-            ClientSecret = keycloakConfig["ClientSecret"]
-        };
-
-        var httpClient = AuthenticationHttpClientFactory.Create(credentials) ??
-            throw new Exception("Could not create Keycloak Admin client");
-
-        services.AddSingleton<AuthenticationHttpClient>(httpClient);
-
-        services.AddScoped<IIdentityService, IdentityService>();
-
         services.AddSingleton(TimeProvider.System);
 
         services.AddAuthorization(options =>
