@@ -7,7 +7,7 @@ using SecureStruct.Domain.Enums;
 namespace SecureStruct.Application.TodoLists.Queries.GetTodos;
 
 [Authorize]
-[Authorize(Policy = Policies.TodoResource)]
+[Authorize(Permission = Permissions.TodoResource)]
 public record GetTodosQuery : IRequest<TodosVm>;
 
 public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>

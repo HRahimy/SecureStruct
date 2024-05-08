@@ -60,10 +60,10 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             }
 
             // Policy-based authorization
-            var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy));
+            var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Permission));
             if (authorizeAttributesWithPolicies.Any())
             {
-                var permissions = authorizeAttributesWithPolicies.Select(a => a.Policy).ToList();
+                var permissions = authorizeAttributesWithPolicies.Select(a => a.Permission).ToList();
                 var authorized = await _authorizerService.AuthorizeAsync(_user.AccessToken, permissions);
 
                 if (!authorized)
